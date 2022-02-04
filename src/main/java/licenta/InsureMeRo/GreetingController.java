@@ -1,5 +1,6 @@
 package licenta.InsureMeRo;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,4 +19,12 @@ public class GreetingController {
     public Greeting newName(@RequestBody String name) {
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
+
+//    @PostMapping("/greeting")
+//    public Greeting newGreeting (@RequestBody List<String> peopleName ) {
+//        System.out.println(peopleName);
+//        for(String people:peopleName)
+//            if(people.equals("bb")) return new Greeting(counter.incrementAndGet(), String.format(template, people));
+//        return new Greeting(counter.incrementAndGet(), String.format(template, "World"));
+//    }
 }
