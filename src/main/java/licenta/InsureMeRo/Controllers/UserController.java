@@ -1,4 +1,7 @@
-package licenta.InsureMeRo;
+package licenta.InsureMeRo.Controllers;
+
+import licenta.InsureMeRo.Models.User;
+import licenta.InsureMeRo.Services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

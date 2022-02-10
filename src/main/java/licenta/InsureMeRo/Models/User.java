@@ -1,4 +1,4 @@
-package licenta.InsureMeRo;
+package licenta.InsureMeRo.Models;
 
 import javax.persistence.*;
 
@@ -16,15 +16,18 @@ public class User {
     private String email;
     @Column(name = "password")
     private String password;
+    @Column(name = "loggedIn", columnDefinition = "boolean default false")
+    private boolean loggedIn;
 
     public User() {
     }
 
-    public User(String firstname, String lastname, String email, String password) {
+    public User(String firstname, String lastname, String email, String password, boolean loggedIn) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.loggedIn = loggedIn;
     }
 
     public long getId() {
@@ -67,5 +70,11 @@ public class User {
         this.password = password;
     }
 
+    public boolean getLoggedIn() {
+        return loggedIn;
+    }
 
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
 }

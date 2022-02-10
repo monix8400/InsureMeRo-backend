@@ -1,4 +1,6 @@
-package licenta.InsureMeRo;
+package licenta.InsureMeRo.Repository;
+
+import licenta.InsureMeRo.Models.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

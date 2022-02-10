@@ -1,4 +1,7 @@
-package licenta.InsureMeRo;
+package licenta.InsureMeRo.Services;
+
+import licenta.InsureMeRo.Models.User;
+import licenta.InsureMeRo.Repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
