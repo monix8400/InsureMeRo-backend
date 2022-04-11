@@ -16,7 +16,7 @@ public class User {
     private String email;
     @Column(name = "password")
     private String password;
-    @Column(name = "loggedIn", columnDefinition = "boolean default false")
+    @Column(name = "logged_in", columnDefinition = "boolean default false")
     private boolean loggedIn;
 
     public User() {
