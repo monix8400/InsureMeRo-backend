@@ -1,6 +1,8 @@
 package licenta.InsureMeRo.Models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -19,15 +21,20 @@ public class User {
     @Column(name = "logged_in", columnDefinition = "boolean default false")
     private boolean loggedIn;
 
+    @OneToMany(mappedBy = "user")
+    private List<Insurance> insurances = new ArrayList<>();
+
     public User() {
     }
 
-    public User(String firstname, String lastname, String email, String password, boolean loggedIn) {
+    public User(long id, String firstname, String lastname, String email, String password, boolean loggedIn, List<Insurance> insurances) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.loggedIn = loggedIn;
+        this.insurances = insurances;
     }
 
     public long getId() {
@@ -76,5 +83,18 @@ public class User {
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", loggedIn=" + loggedIn +
+                ", insurances=" + insurances +
+                '}';
     }
 }

@@ -4,37 +4,33 @@ package licenta.InsureMeRo.Models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "personal_info")
-public class PersonalInfo {
+@Table(name = "drivers")
+public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "person_type")
-    private PersonType personType;
-    @Column(name = "name")
+    @Column(name="name")
     private String name;
+    @Column(name="personal_identification_number")
+    private String personalIdentificationNumber;
     @Column(name="identity_card_series")
     private String identityCardSeries;
     @Column(name="identity_card_nr")
     private String identityCardNr;
-    @Column(name = "code") //cnp/cui
-    private String code;
 
-    @OneToOne
-    @JoinColumn(name="address_id")
-    private Address address;
+    @ManyToOne(optional = false)
+    private Insurance insurance;
 
-    public PersonalInfo() {
+    public Driver() {
     }
 
-    public PersonalInfo(long id, PersonType personType, String name, String identityCardSeries, String identityCardNr, String code, Address address) {
+    public Driver(long id, String name, String personalIdentificationNumber, String identityCardSeries, String identityCardNr, Insurance insurance) {
         this.id = id;
-        this.personType = personType;
         this.name = name;
+        this.personalIdentificationNumber = personalIdentificationNumber;
         this.identityCardSeries = identityCardSeries;
         this.identityCardNr = identityCardNr;
-        this.code = code;
-        this.address = address;
+        this.insurance = insurance;
     }
 
     public long getId() {
@@ -45,20 +41,20 @@ public class PersonalInfo {
         this.id = id;
     }
 
-    public PersonType getPersonType() {
-        return personType;
-    }
-
-    public void setPersonType(PersonType personType) {
-        this.personType = personType;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPersonalIdentificationNumber() {
+        return personalIdentificationNumber;
+    }
+
+    public void setPersonalIdentificationNumber(String personalIdentificationNumber) {
+        this.personalIdentificationNumber = personalIdentificationNumber;
     }
 
     public String getIdentityCardSeries() {
@@ -77,32 +73,23 @@ public class PersonalInfo {
         this.identityCardNr = identityCardNr;
     }
 
-    public String getCode() {
-        return code;
+    public Insurance getInsurance() {
+        return insurance;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setInsurance(Insurance insurance) {
+        this.insurance = insurance;
     }
 
     @Override
     public String toString() {
-        return "PersonalInfo{" +
+        return "Driver{" +
                 "id=" + id +
-                ", personType=" + personType +
                 ", name='" + name + '\'' +
+                ", personalIdentificationNumber='" + personalIdentificationNumber + '\'' +
                 ", identityCardSeries='" + identityCardSeries + '\'' +
                 ", identityCardNr='" + identityCardNr + '\'' +
-                ", code='" + code + '\'' +
-                ", address=" + address +
+                ", insurance=" + insurance +
                 '}';
     }
 }
