@@ -15,14 +15,14 @@ public class Address {
     @Column(name = "street")
     private String street;
     @Column(name = "number")
-    private int number;
+    private String number;
     @Column(name = "zip_code")
     private int zipCode;
 
     public Address() {
     }
 
-    public Address(long id, String county, String city, String street, int number, int zipCode) {
+    public Address(long id, String county, String city, String street, String number, int zipCode) {
         this.id = id;
         this.county = county;
         this.city = city;
@@ -63,11 +63,11 @@ public class Address {
         this.street = street;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
