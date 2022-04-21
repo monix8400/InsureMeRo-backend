@@ -9,36 +9,40 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name="registration_nr")
+    @Column(name = "registration_nr")
     private String registrationNr;
-    @Column(name="category_code")
+    @Column(name = "category_code")
     private String categoryCode;
-    @Column(name="civseries")
+
+    @Column(name = "chassis_series")
+    private String chassisSeries;
+    @Column(name = "civseries")
     private String CIVSeries;
-    @Column(name="make")
+    @Column(name = "make")
     private String make;
-    @Column(name="model")
+    @Column(name = "model")
     private String model;
-    @Column(name="year_of_manufacture")
+    @Column(name = "year_of_manufacture")
     private Date yearOfManufacture;
-    @Column(name="fuel_type")
+    @Column(name = "fuel_type")
     private String fuelType;
-    @Column(name="cylindrical_capacity")
+    @Column(name = "cylindrical_capacity")
     private int cylindricalCapacity;
     @Column(name = "max_net_power")
     private int maxNetPower;
-    @Column(name="max_total_mass")
+    @Column(name = "max_total_mass")
     private int maxTotalMass;
-    @Column(name="seats_nr")
+    @Column(name = "seats_nr")
     private int seatsNr;
 
     public Vehicle() {
     }
 
-    public Vehicle(long id, String registrationNr, String categoryCode, String CIVSeries, String make, String model, Date yearOfManufacture, String fuelType, int cylindricalCapacity, int maxNetPower, int maxTotalMass, int seatsNr) {
+    public Vehicle(long id, String registrationNr, String categoryCode, String chassisSeries, String CIVSeries, String make, String model, Date yearOfManufacture, String fuelType, int cylindricalCapacity, int maxNetPower, int maxTotalMass, int seatsNr) {
         this.id = id;
         this.registrationNr = registrationNr;
         this.categoryCode = categoryCode;
+        this.chassisSeries = chassisSeries;
         this.CIVSeries = CIVSeries;
         this.make = make;
         this.model = model;
@@ -72,6 +76,14 @@ public class Vehicle {
 
     public void setCategoryCode(String categoryCode) {
         this.categoryCode = categoryCode;
+    }
+
+    public String getChassisSeries() {
+        return chassisSeries;
+    }
+
+    public void setChassisSeries(String chassisSeries) {
+        this.chassisSeries = chassisSeries;
     }
 
     public String getCIVSeries() {
@@ -152,6 +164,7 @@ public class Vehicle {
                 "id=" + id +
                 ", registrationNr='" + registrationNr + '\'' +
                 ", categoryCode='" + categoryCode + '\'' +
+                ", chassisSeries='" + chassisSeries + '\'' +
                 ", CIVSeries='" + CIVSeries + '\'' +
                 ", make='" + make + '\'' +
                 ", model='" + model + '\'' +
