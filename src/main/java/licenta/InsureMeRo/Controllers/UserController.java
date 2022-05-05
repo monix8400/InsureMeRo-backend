@@ -9,7 +9,6 @@ import licenta.InsureMeRo.Models.User;
 import licenta.InsureMeRo.Services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -70,7 +68,7 @@ public class UserController {
                         .withSubject(user.getEmail())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
-                        .withClaim("roles", new ArrayList<>())
+                        .withClaim("roles", new ArrayList<>().add(user.getRole()))//user.getRole().stream().map(GrantedAuthority::getAuthority).toList()
                         .sign(algorithm);
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("accessToken", accessToken);
@@ -78,7 +76,7 @@ public class UserController {
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
             } catch (Exception e) {
-                response.setHeader("error", e.getMessage());
+                response.setHeader("Error ", e.getMessage());
                 response.setStatus(FORBIDDEN.value());
 //                    response.sendError(FORBIDDEN.value());
                 Map<String, String> error = new HashMap<>();

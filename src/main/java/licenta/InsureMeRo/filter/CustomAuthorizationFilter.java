@@ -27,12 +27,13 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
-public class CustomAuthorisationFilter extends OncePerRequestFilter {
+public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().equals("/login") && request.getServletPath().equals("user/getRefreshToken")
-                && request.getServletPath().equals("/swagger-resources/**")) {
+        if (request.getServletPath().equals("/login") || request.getServletPath().equals("/user/getRefreshToken")
+                || request.getServletPath().equals("/swagger-resources/**") || request.getServletPath().equals("/v2/api-docs")
+                || request.getServletPath().equals("/swagger-resources") || request.getServletPath().equals("/swagger-ui/**")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -51,7 +52,7 @@ public class CustomAuthorisationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
-                    log.error("Error loggig in: {}", e.getMessage());
+                    log.error("Error logging in: {}", e.getMessage());
                     response.setHeader("error", e.getMessage());
                     response.setStatus(FORBIDDEN.value());
 //                    response.sendError(FORBIDDEN.value());

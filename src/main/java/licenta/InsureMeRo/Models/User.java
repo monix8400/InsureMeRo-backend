@@ -18,8 +18,8 @@ public class User {
     private String email;
     @Column(name = "password")
     private String password;
-    @Column(name = "logged_in", columnDefinition = "boolean default false")
-    private boolean loggedIn;
+    @Column(name = "role", columnDefinition = "varchar(255) default 'CLIENT'")
+    private String role;
 
     @OneToMany(mappedBy = "user")
     private List<Insurance> insurances = new ArrayList<>();
@@ -27,13 +27,13 @@ public class User {
     public User() {
     }
 
-    public User(long id, String firstname, String lastname, String email, String password, boolean loggedIn, List<Insurance> insurances) {
+    public User(long id, String firstname, String lastname, String email, String password, String role, List<Insurance> insurances) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.loggedIn = loggedIn;
+        this.role = role;
         this.insurances = insurances;
     }
 
@@ -77,12 +77,12 @@ public class User {
         this.password = password;
     }
 
-    public boolean getLoggedIn() {
-        return loggedIn;
+    public String getRole() {
+        return role;
     }
 
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class User {
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", loggedIn=" + loggedIn +
+                ", role=" + role +
                 ", insurances=" + insurances +
                 '}';
     }
