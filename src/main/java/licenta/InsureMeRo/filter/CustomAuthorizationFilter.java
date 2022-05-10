@@ -32,6 +32,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getServletPath().equals("/login") || request.getServletPath().equals("/user/getRefreshToken")
+                || request.getServletPath().equals("/user/addUser")
                 || request.getServletPath().equals("/swagger-resources/**") || request.getServletPath().equals("/v2/api-docs")
                 || request.getServletPath().equals("/swagger-resources") || request.getServletPath().equals("/swagger-ui/**")) {
             filterChain.doFilter(request, response);
