@@ -9,6 +9,7 @@ import licenta.InsureMeRo.Models.User;
 import licenta.InsureMeRo.Services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,6 +71,8 @@ public class UserController {
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles", new ArrayList<>().add(user.getRole()))//user.getRole().stream().map(GrantedAuthority::getAuthority).toList()
                         .sign(algorithm);
+//                response.setHeader("accessToken", accessToken);
+//                response.setHeader("refreshToken", refreshToken);
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("accessToken", accessToken);
                 tokens.put("refreshToken", refreshToken);
@@ -88,6 +91,13 @@ public class UserController {
             throw new RuntimeException("Refresh token is missing");
         }
 
+    }
+
+    @GetMapping(value = "/user")
+    public Optional<User> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName();
+        userService.getUserByEmail(email);
+        return userService.getUserByEmail(email);
     }
 
     //update
