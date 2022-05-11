@@ -19,7 +19,7 @@ public class InsuranceController {
         this.insuranceService = insuranceService;
     }
 
-    @GetMapping("/geInsurances")
+    @GetMapping("/getInsurances")
     public List<Insurance> getInsurances() {
         return insuranceService.getInsurances();
     }

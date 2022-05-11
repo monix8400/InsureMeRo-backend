@@ -19,16 +19,14 @@ public class PersonalInfo {
     private String identityCardNr;
     @Column(name = "code") //cnp/cui
     private String code;
-
-    @OneToOne
-    @JoinColumn(name="address_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="address_id", referencedColumnName = "id")
     private Address address;
 
     public PersonalInfo() {
     }
 
-    public PersonalInfo(long id, PersonType personType, String name, String identityCardSeries, String identityCardNr, String code, Address address) {
-        this.id = id;
+    public PersonalInfo(PersonType personType, String name, String identityCardSeries, String identityCardNr, String code, Address address) {
         this.personType = personType;
         this.name = name;
         this.identityCardSeries = identityCardSeries;
