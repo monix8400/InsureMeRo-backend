@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "insurances")
@@ -20,11 +21,11 @@ public class Insurance {
     @Column(name = "price")
     private float price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "personal_info_id")
     private PersonalInfo personalInfo;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
@@ -38,8 +39,7 @@ public class Insurance {
     public Insurance() {
     }
 
-    public Insurance(long id, Date issueDate, Date validFrom, Date validTo, float price, PersonalInfo personalInfo, Vehicle vehicle, User user, List<Driver> drivers) {
-        this.id = id;
+    public Insurance(Date issueDate, Date validFrom, Date validTo, float price, PersonalInfo personalInfo, Vehicle vehicle, User user, List<Driver> drivers) {
         this.issueDate = issueDate;
         this.validFrom = validFrom;
         this.validTo = validTo;
@@ -117,7 +117,6 @@ public class Insurance {
     @Override
     public String toString() {
         return "Insurance{" +
-                "id=" + id +
                 ", issueDate=" + issueDate +
                 ", validFrom=" + validFrom +
                 ", validTo=" + validTo +
