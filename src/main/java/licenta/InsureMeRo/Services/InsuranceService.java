@@ -1,12 +1,9 @@
 package licenta.InsureMeRo.Services;
 
 import licenta.InsureMeRo.Models.Insurance;
-import licenta.InsureMeRo.Models.User;
 import licenta.InsureMeRo.Repository.InsuranceRepository;
 import licenta.InsureMeRo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +21,6 @@ public class InsuranceService {
     }
 
     public void addInsurance(Insurance insurance) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail((String) auth.getPrincipal()).get();
-        insurance.setUser(user);
-
         insuranceRepository.save(insurance);
     }
 

@@ -1,13 +1,17 @@
 package licenta.InsureMeRo.Models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(name = "insurances")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Insurance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,23 +36,6 @@ public class Insurance {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private User user;
-
-    @OneToMany(mappedBy = "insurance")
-    private List<Driver> drivers = new ArrayList<>();
-
-    public Insurance() {
-    }
-
-    public Insurance(Date issueDate, Date validFrom, Date validTo, float price, PersonalInfo personalInfo, Vehicle vehicle, User user, List<Driver> drivers) {
-        this.issueDate = issueDate;
-        this.validFrom = validFrom;
-        this.validTo = validTo;
-        this.price = price;
-        this.personalInfo = personalInfo;
-        this.vehicle = vehicle;
-        this.user = user;
-        this.drivers = drivers;
-    }
 
     public long getId() {
         return id;
@@ -117,6 +104,7 @@ public class Insurance {
     @Override
     public String toString() {
         return "Insurance{" +
+                "id=" + id +
                 ", issueDate=" + issueDate +
                 ", validFrom=" + validFrom +
                 ", validTo=" + validTo +
@@ -124,7 +112,6 @@ public class Insurance {
                 ", personalInfo=" + personalInfo +
                 ", vehicle=" + vehicle +
                 ", user=" + user +
-                ", drivers=" + drivers +
                 '}';
     }
 }

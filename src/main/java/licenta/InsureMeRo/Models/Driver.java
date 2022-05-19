@@ -18,19 +18,17 @@ public class Driver {
     @Column(name="identity_card_nr")
     private String identityCardNr;
 
-    @ManyToOne(optional = false)
-    private Insurance insurance;
+    private Long insuranceId;
 
     public Driver() {
     }
 
-    public Driver(long id, String name, String personalIdentificationNumber, String identityCardSeries, String identityCardNr, Insurance insurance) {
-        this.id = id;
+    public Driver(String name, String personalIdentificationNumber, String identityCardSeries, String identityCardNr, Long insuranceId) {
         this.name = name;
         this.personalIdentificationNumber = personalIdentificationNumber;
         this.identityCardSeries = identityCardSeries;
         this.identityCardNr = identityCardNr;
-        this.insurance = insurance;
+        this.insuranceId = insuranceId;
     }
 
     public long getId() {
@@ -73,12 +71,12 @@ public class Driver {
         this.identityCardNr = identityCardNr;
     }
 
-    public Insurance getInsurance() {
-        return insurance;
+    public Long getInsurance() {
+        return insuranceId;
     }
 
-    public void setInsurance(Insurance insurance) {
-        this.insurance = insurance;
+    public void setInsurance(Long insuranceId) {
+        this.insuranceId = insuranceId;
     }
 
     @Override
@@ -89,7 +87,7 @@ public class Driver {
                 ", personalIdentificationNumber='" + personalIdentificationNumber + '\'' +
                 ", identityCardSeries='" + identityCardSeries + '\'' +
                 ", identityCardNr='" + identityCardNr + '\'' +
-                ", insurance=" + insurance +
+                ", insuranceId=" + insuranceId +
                 '}';
     }
 }
