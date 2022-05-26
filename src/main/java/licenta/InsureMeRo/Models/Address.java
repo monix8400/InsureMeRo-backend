@@ -1,9 +1,16 @@
 package licenta.InsureMeRo.Models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "addresses")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,18 +25,6 @@ public class Address {
     private String number;
     @Column(name = "zip_code")
     private int zipCode;
-
-    public Address() {
-    }
-
-    public Address(long id, String county, String city, String street, String number, int zipCode) {
-        this.id = id;
-        this.county = county;
-        this.city = city;
-        this.street = street;
-        this.number = number;
-        this.zipCode = zipCode;
-    }
 
     public long getId() {
         return id;
@@ -81,7 +76,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Adress{" +
+        return "Address{" +
                 "id=" + id +
                 ", county='" + county + '\'' +
                 ", city='" + city + '\'' +

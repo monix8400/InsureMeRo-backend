@@ -1,11 +1,9 @@
 package licenta.InsureMeRo.Controllers;
 
-import licenta.InsureMeRo.Models.Driver;
-import licenta.InsureMeRo.Models.Insurance;
-import licenta.InsureMeRo.Models.PersonalInfo;
-import licenta.InsureMeRo.Models.User;
+import licenta.InsureMeRo.Models.*;
 import licenta.InsureMeRo.Services.*;
 import licenta.InsureMeRo.dto.InsuranceDTO;
+import licenta.InsureMeRo.dto.InsuranceInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 @RestController
 @CrossOrigin("*")//(origins = "http://localhost:4200")
@@ -43,53 +42,81 @@ public class InsuranceController {
     }
 
     @GetMapping("/getInsurances")
-    public List<Insurance> getInsurances() {
-        return insuranceService.getInsurances();
+    public List<InsuranceDTO> getInsurances() {
+        List<Insurance> insurancesList = insuranceService.getInsurances();
+        List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
+        for (Insurance insurance : insurancesList) {
+            InsuranceDTO insuranceDTO = new InsuranceDTO();
+            insuranceDTO.setInsurance(insurance);
+            PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
+            insuranceDTO.setPersonalInfo(personalInfo);
+            Vehicle vehicle = vehicleService.getVehicleById(insurance.getVehicleId()).get();
+            insuranceDTO.setVehicle(vehicle);
+
+            insuranceDTOList.add(insuranceDTO);
+        }
+        return insuranceDTOList;
+    }
+
+    @GetMapping("/getInsurancesForCurrentUser")
+    public List<InsuranceDTO> getInsurancesForCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
+
+        List<Insurance> insurancesList = insuranceService.getInsurances();
+        List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
+
+        for (Insurance insurance : insurancesList) {
+            if (insurance.getUserId() == user.getId()) {
+                InsuranceDTO insuranceDTO = new InsuranceDTO();
+                insuranceDTO.setInsurance(insurance);
+                PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
+                insuranceDTO.setPersonalInfo(personalInfo);
+                Vehicle vehicle = vehicleService.getVehicleById(insurance.getVehicleId()).get();
+                insuranceDTO.setVehicle(vehicle);
+
+                insuranceDTOList.add(insuranceDTO);
+            }
+        }
+        return insuranceDTOList;
     }
 
     @PostMapping("/addInsurance")
-    public void addInsurance(@RequestBody InsuranceDTO insuranceDTO) {
+    public void addInsurance(@RequestBody InsuranceInfoDTO insuranceInfoDTO) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
         Insurance insurance = new Insurance();
-        insurance.setUser(user);
+        insurance.setUserId(user.getId());
         insurance.setIssueDate(Date.valueOf(LocalDate.now()));
-        insurance.setValidFrom(insuranceDTO.getStartDate());
-        if (insuranceDTO.getMonths() == 6) {
+        insurance.setValidFrom(insuranceInfoDTO.getStartDate());
 
-            LocalDate date = insuranceDTO.getStartDate().toLocalDate();
-            LocalDate newDate = date.plusDays(180);
+        LocalDate date = insuranceInfoDTO.getStartDate().toLocalDate();
+        LocalDate newDate = (insuranceInfoDTO.getMonths() == 6) ? date.plusDays(180) : date.plusDays(360);
+        insurance.setValidTo(Date.valueOf(newDate));
 
-            insurance.setValidTo(Date.valueOf(newDate));
-        } else {
-            LocalDate date = insuranceDTO.getStartDate().toLocalDate();
-            LocalDate newDate = date.plusDays(360);
+        Vehicle vehicle = vehicleService.addVehicle(insuranceInfoDTO.getVehicle());
+        insurance.setVehicleId(vehicle.getId());
 
-            insurance.setValidTo(Date.valueOf(newDate));
-        }
-        insurance.setPersonalInfo(insuranceDTO.getPersonalInfo());
-        insurance.setVehicle(insuranceDTO.getVehicle());
+        PersonalInfo personalInfo = personalInfoService.addPersonalInfo(insuranceInfoDTO.getPersonalInfo());
+        insurance.setPersonalInfoId(personalInfo.getId());
+
         insuranceService.addInsurance(insurance);
-        log.info("added Insurance");
 
         Long insuranceId = insurance.getId();
-        Driver userToDriver = convertPersonalInfoToDriver(insuranceId, auth.getName(), insuranceDTO.getPersonalInfo());
+        Driver userToDriver = insuranceService.convertPersonalInfoToDriver(insuranceId, auth.getName(), insuranceInfoDTO.getPersonalInfo());
         driverService.addDriver(userToDriver);
-        for (Driver driver : insuranceDTO.getDriverList()) {
+        for (Driver driver : insuranceInfoDTO.getDriverList()) {
             driver.setInsurance(insuranceId);
             driverService.addDriver(driver);
         }
+
+        if (insuranceInfoDTO.getPersonalInfo().getPersonType() == PersonType.INDIVIDUAL) {
+            float newPrice = insuranceService.calculatePrice(insuranceInfoDTO.getMonths(), personalInfo);
+            insuranceService.updatePrice(insuranceId, newPrice);
+        }
     }
 
-    public Driver convertPersonalInfoToDriver(Long insuranceId, String userName, PersonalInfo personalInfo) {
-        Driver driver = new Driver();
-        driver.setIdentityCardNr(personalInfo.getIdentityCardNr());
-        driver.setIdentityCardSeries(personalInfo.getIdentityCardSeries());
-        driver.setName(userName);
-        driver.setPersonalIdentificationNumber(personalInfo.getCode());
-        driver.setInsurance(insuranceId);
-        return driver;
-    }
 
     @GetMapping("/getInsuranceById/{id}")
     public Insurance getInsuranceById(@PathVariable("id") Long id) {

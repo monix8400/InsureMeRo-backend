@@ -1,8 +1,8 @@
 package licenta.InsureMeRo.Models;
 
 public enum PersonType {
-    INDIVIDUAL("individual"),
-    LEGAL_PERSON("legalPerson");
+    INDIVIDUAL("INDIVIDUAL"),
+    LEGAL_PERSON("LEGAL_PERSON");
 
     PersonType(String legalPerson) {
     }

@@ -1,10 +1,17 @@
 package licenta.InsureMeRo.Models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Table(name = "vehicles")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,17 +20,16 @@ public class Vehicle {
     private String registrationNr;
     @Column(name = "category_code")
     private String categoryCode;
-
     @Column(name = "chassis_series")
     private String chassisSeries;
-    @Column(name = "civseries")
-    private String CIVSeries;
+    @Column(name = "civ_series")
+    private String civSeries;
     @Column(name = "make")
     private String make;
     @Column(name = "model")
     private String model;
     @Column(name = "year_of_manufacture")
-    private Date yearOfManufacture;
+    private int yearOfManufacture;
     @Column(name = "fuel_type")
     private String fuelType;
     @Column(name = "cylindrical_capacity")
@@ -34,25 +40,6 @@ public class Vehicle {
     private int maxTotalMass;
     @Column(name = "seats_nr")
     private int seatsNr;
-
-    public Vehicle() {
-    }
-
-    public Vehicle(long id, String registrationNr, String categoryCode, String chassisSeries, String CIVSeries, String make, String model, Date yearOfManufacture, String fuelType, int cylindricalCapacity, int maxNetPower, int maxTotalMass, int seatsNr) {
-        this.id = id;
-        this.registrationNr = registrationNr;
-        this.categoryCode = categoryCode;
-        this.chassisSeries = chassisSeries;
-        this.CIVSeries = CIVSeries;
-        this.make = make;
-        this.model = model;
-        this.yearOfManufacture = yearOfManufacture;
-        this.fuelType = fuelType;
-        this.cylindricalCapacity = cylindricalCapacity;
-        this.maxNetPower = maxNetPower;
-        this.maxTotalMass = maxTotalMass;
-        this.seatsNr = seatsNr;
-    }
 
     public long getId() {
         return id;
@@ -87,11 +74,11 @@ public class Vehicle {
     }
 
     public String getCIVSeries() {
-        return CIVSeries;
+        return civSeries;
     }
 
     public void setCIVSeries(String CIVSeries) {
-        this.CIVSeries = CIVSeries;
+        this.civSeries = CIVSeries;
     }
 
     public String getMake() {
@@ -110,11 +97,11 @@ public class Vehicle {
         this.model = model;
     }
 
-    public Date getYearOfManufacture() {
+    public int getYearOfManufacture() {
         return yearOfManufacture;
     }
 
-    public void setYearOfManufacture(Date yearOfManufacture) {
+    public void setYearOfManufacture(int yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
     }
 
@@ -165,7 +152,7 @@ public class Vehicle {
                 ", registrationNr='" + registrationNr + '\'' +
                 ", categoryCode='" + categoryCode + '\'' +
                 ", chassisSeries='" + chassisSeries + '\'' +
-                ", CIVSeries='" + CIVSeries + '\'' +
+                ", civSeries='" + civSeries + '\'' +
                 ", make='" + make + '\'' +
                 ", model='" + model + '\'' +
                 ", yearOfManufacture=" + yearOfManufacture +

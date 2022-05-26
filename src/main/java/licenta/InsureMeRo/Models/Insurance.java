@@ -25,17 +25,17 @@ public class Insurance {
     @Column(name = "price")
     private float price;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "personal_info_id")
-    private PersonalInfo personalInfo;
+    private Long personalInfoId;//PersonalInfo personalInfo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    //    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id")
-    private Vehicle vehicle;
+    private Long vehicleId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    //    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
-    private User user;
+    private Long userId;//User user;
 
     public long getId() {
         return id;
@@ -77,28 +77,53 @@ public class Insurance {
         this.price = price;
     }
 
-    public PersonalInfo getPersonalInfo() {
-        return personalInfo;
+//    public PersonalInfo getPersonalInfo() {
+//        return personalInfo;
+//    }
+//
+//    public void setPersonalInfo(PersonalInfo personalInfo) {
+//        this.personalInfo = personalInfo;
+//    }
+//
+//    public Vehicle getVehicle() {
+//        return vehicle;
+//    }
+//
+//    public void setVehicle(Vehicle vehicle) {
+//        this.vehicle = vehicle;
+//    }
+//
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
+
+
+    public Long getPersonalInfoId() {
+        return personalInfoId;
     }
 
-    public void setPersonalInfo(PersonalInfo personalInfo) {
-        this.personalInfo = personalInfo;
+    public void setPersonalInfoId(Long personalInfoId) {
+        this.personalInfoId = personalInfoId;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public Long getVehicleId() {
+        return vehicleId;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setVehicleId(Long vehicleId) {
+        this.vehicleId = vehicleId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -109,9 +134,9 @@ public class Insurance {
                 ", validFrom=" + validFrom +
                 ", validTo=" + validTo +
                 ", price=" + price +
-                ", personalInfo=" + personalInfo +
-                ", vehicle=" + vehicle +
-                ", user=" + user +
+                ", personalInfo=" + personalInfoId +
+                ", vehicle=" + vehicleId +
+                ", user=" + userId +
                 '}';
     }
 }

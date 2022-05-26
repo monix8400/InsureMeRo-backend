@@ -1,10 +1,17 @@
 package licenta.InsureMeRo.Models;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "personal_info")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PersonalInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,27 +20,18 @@ public class PersonalInfo {
     private PersonType personType;
     @Column(name = "name")
     private String name;
-    @Column(name="identity_card_series")
+    @Column(name = "identity_card_series")
     private String identityCardSeries;
-    @Column(name="identity_card_nr")
+    @Column(name = "identity_card_nr")
     private String identityCardNr;
     @Column(name = "code") //cnp/cui
     private String code;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="address_id", referencedColumnName = "id")
-    private Address address;
+    //    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Long addressId;//Address address;
+    @Column(name = "bonus_malus", columnDefinition = "varchar(255) default 'b0'")
+    private String bonusMalus = "b0";
 
-    public PersonalInfo() {
-    }
-
-    public PersonalInfo(PersonType personType, String name, String identityCardSeries, String identityCardNr, String code, Address address) {
-        this.personType = personType;
-        this.name = name;
-        this.identityCardSeries = identityCardSeries;
-        this.identityCardNr = identityCardNr;
-        this.code = code;
-        this.address = address;
-    }
 
     public long getId() {
         return id;
@@ -83,13 +81,31 @@ public class PersonalInfo {
         this.code = code;
     }
 
-    public Address getAddress() {
-        return address;
+//    public Address getAddress() {
+//        return address;
+//    }
+//
+//    public void setAddress(Address address) {
+//        this.address = address;
+//    }
+
+
+    public Long getAddressId() {
+        return addressId;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
     }
+
+    public String getBonusMalus() {
+        return bonusMalus;
+    }
+
+    public void setBonusMalus(String bonusMalus) {
+        this.bonusMalus = bonusMalus;
+    }
+
 
     @Override
     public String toString() {
@@ -100,7 +116,8 @@ public class PersonalInfo {
                 ", identityCardSeries='" + identityCardSeries + '\'' +
                 ", identityCardNr='" + identityCardNr + '\'' +
                 ", code='" + code + '\'' +
-                ", address=" + address +
+                ", address=" + addressId + //address +
+                ", bonusMalus='" + bonusMalus + '\'' +
                 '}';
     }
 }

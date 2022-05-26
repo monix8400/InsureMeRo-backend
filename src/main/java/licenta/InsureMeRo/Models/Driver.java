@@ -1,35 +1,31 @@
 package licenta.InsureMeRo.Models;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "drivers")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
-    @Column(name="personal_identification_number")
+    @Column(name = "personal_identification_number")
     private String personalIdentificationNumber;
-    @Column(name="identity_card_series")
+    @Column(name = "identity_card_series")
     private String identityCardSeries;
-    @Column(name="identity_card_nr")
+    @Column(name = "identity_card_nr")
     private String identityCardNr;
-
+    @Column(name = "insurance_id")
     private Long insuranceId;
-
-    public Driver() {
-    }
-
-    public Driver(String name, String personalIdentificationNumber, String identityCardSeries, String identityCardNr, Long insuranceId) {
-        this.name = name;
-        this.personalIdentificationNumber = personalIdentificationNumber;
-        this.identityCardSeries = identityCardSeries;
-        this.identityCardNr = identityCardNr;
-        this.insuranceId = insuranceId;
-    }
 
     public long getId() {
         return id;

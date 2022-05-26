@@ -1,11 +1,18 @@
 package licenta.InsureMeRo.Models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,21 +28,9 @@ public class User {
     @Column(name = "role", columnDefinition = "varchar(255) default 'CLIENT'")
     private String role;
 
-    @OneToMany(mappedBy = "user")
-    private List<Insurance> insurances = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<Insurance> insurances = new ArrayList<>();
 
-    public User() {
-    }
-
-    public User(long id, String firstname, String lastname, String email, String password, String role, List<Insurance> insurances) {
-        this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.insurances = insurances;
-    }
 
     public long getId() {
         return id;
@@ -94,7 +89,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
-                ", insurances=" + insurances +
+//                ", insurances=" + insurances +
                 '}';
     }
 }

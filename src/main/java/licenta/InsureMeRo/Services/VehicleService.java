@@ -18,8 +18,9 @@ public class VehicleService {
         this.vehicleRepository = vehicleRepository;
     }
 
-    public void addVehicle(Vehicle vehicle) {
+    public Vehicle addVehicle(Vehicle vehicle) {
         vehicleRepository.save(vehicle);
+        return vehicle;
     }
 
     public List<Vehicle> getVehicles() {

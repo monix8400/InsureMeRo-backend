@@ -1,24 +1,18 @@
 package licenta.InsureMeRo.dto;
 
-import licenta.InsureMeRo.Models.Driver;
+import licenta.InsureMeRo.Models.Insurance;
 import licenta.InsureMeRo.Models.PersonalInfo;
 import licenta.InsureMeRo.Models.Vehicle;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor
 public class InsuranceDTO {
+
     PersonalInfo personalInfo;
     Vehicle vehicle;
-    List<Driver> driverList;
-
-    Date startDate;
-
-    int Months;
+    Insurance insurance;
 
     public PersonalInfo getPersonalInfo() {
         return personalInfo;
@@ -36,27 +30,11 @@ public class InsuranceDTO {
         this.vehicle = vehicle;
     }
 
-    public List<Driver> getDriverList() {
-        return driverList;
+    public Insurance getInsurance() {
+        return insurance;
     }
 
-    public void setDriverList(List<Driver> driverList) {
-        this.driverList = driverList;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public int getMonths() {
-        return Months;
-    }
-
-    public void setMonths(int months) {
-        Months = months;
+    public void setInsurance(Insurance insurance) {
+        this.insurance = insurance;
     }
 }
