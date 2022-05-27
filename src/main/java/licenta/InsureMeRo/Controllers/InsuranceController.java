@@ -4,6 +4,7 @@ import licenta.InsureMeRo.Models.*;
 import licenta.InsureMeRo.Services.*;
 import licenta.InsureMeRo.dto.InsuranceDTO;
 import licenta.InsureMeRo.dto.InsuranceInfoDTO;
+import licenta.InsureMeRo.dto.PersonalInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 
 @RestController
@@ -79,6 +78,31 @@ public class InsuranceController {
             }
         }
         return insuranceDTOList;
+    }
+
+    @GetMapping("/getPersonalInfoForCurrentUser")
+    public Set<PersonalInfoDTO> getPersonalInfoForCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
+
+        List<Insurance> insurancesList = insuranceService.getInsurances();
+        Set<PersonalInfoDTO> personalInfoDTOSet = new HashSet<>();
+
+        PersonalInfoDTO personalInfoDTO = new PersonalInfoDTO();
+
+        for (Insurance insurance : insurancesList) {
+            if (insurance.getUserId() == user.getId()) {
+
+                PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
+                personalInfoDTO.setPersonalInfo(personalInfo);
+
+                Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
+                personalInfoDTO.setAddress(address);
+
+                personalInfoDTOSet.add(personalInfoDTO);
+            }
+        }
+        return personalInfoDTOSet;
     }
 
     @PostMapping("/addInsurance")
