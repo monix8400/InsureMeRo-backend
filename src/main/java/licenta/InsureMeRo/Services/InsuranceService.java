@@ -40,11 +40,11 @@ public class InsuranceService {
         insuranceRepository.deleteById(id);
     }
 
-    public Driver convertPersonalInfoToDriver(Long insuranceId, String userName, PersonalInfo personalInfo) {
+    public Driver convertPersonalInfoToDriver(Long insuranceId, PersonalInfo personalInfo) {
         Driver driver = new Driver();
         driver.setIdentityCardNr(personalInfo.getIdentityCardNr());
         driver.setIdentityCardSeries(personalInfo.getIdentityCardSeries());
-        driver.setName(userName);
+        driver.setName(personalInfo.getName());
         driver.setPersonalIdentificationNumber(personalInfo.getCode());
         driver.setInsurance(insuranceId);
         return driver;

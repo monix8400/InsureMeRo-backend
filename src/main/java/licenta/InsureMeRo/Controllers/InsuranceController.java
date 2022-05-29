@@ -153,7 +153,7 @@ public class InsuranceController {
         insuranceService.addInsurance(insurance);
 
         Long insuranceId = insurance.getId();
-        Driver userToDriver = insuranceService.convertPersonalInfoToDriver(insuranceId, auth.getName(), insuranceInfoDTO.getPersonalInfo());
+        Driver userToDriver = insuranceService.convertPersonalInfoToDriver(insuranceId, insuranceInfoDTO.getPersonalInfo());
         driverService.addDriver(userToDriver);
         for (Driver driver : insuranceInfoDTO.getDriverList()) {
             driver.setInsurance(insuranceId);
