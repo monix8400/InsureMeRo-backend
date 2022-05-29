@@ -145,9 +145,9 @@ public class InsuranceController {
         Vehicle vehicle = vehicleService.addVehicle(insuranceInfoDTO.getVehicle());
         insurance.setVehicleId(vehicle.getId());
 
-        PersonalInfo personalInfo = personalInfoService.addPersonalInfo(insuranceInfoDTO.getPersonalInfo());
         Address address = addressService.addAddress(insuranceInfoDTO.getAddress());
-        personalInfo.setAddressId(address.getId());
+        insuranceInfoDTO.getPersonalInfo().setAddressId(address.getId());
+        PersonalInfo personalInfo = personalInfoService.addPersonalInfo(insuranceInfoDTO.getPersonalInfo());
         insurance.setPersonalInfoId(personalInfo.getId());
 
         insuranceService.addInsurance(insurance);
