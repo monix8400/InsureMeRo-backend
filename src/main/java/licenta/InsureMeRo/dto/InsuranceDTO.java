@@ -1,5 +1,6 @@
 package licenta.InsureMeRo.dto;
 
+import licenta.InsureMeRo.Models.Address;
 import licenta.InsureMeRo.Models.Insurance;
 import licenta.InsureMeRo.Models.PersonalInfo;
 import licenta.InsureMeRo.Models.Vehicle;
@@ -9,10 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InsuranceDTO {
-
+    Address address;
     PersonalInfo personalInfo;
     Vehicle vehicle;
     Insurance insurance;
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public PersonalInfo getPersonalInfo() {
         return personalInfo;

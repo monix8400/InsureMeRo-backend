@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .title {
+        text-align: center;
+    }
+
+    .label {
+        font-weight: bold;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    .valability, .insurance-info {
+        margin: 10px;
+    }
+
+    #logo {
+        width: 300px;
+    }
+
+</style>
+<body>
+<img id="logo" src="logoInsureMeRo.png" alt="logo">
+<table class="valability">
+    <thead>
+    <tr>
+        <th class="title" colspan="2">Valid</th>
+    </tr>
+    <tr>
+        <th>From</th>
+        <th>To</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            {{from}}
+        </td>
+        <td>
+            {{to}}
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table class="insurance-info">
+    <thead>
+    <tr>
+        <th class="title" colspan="2">Owner</th>
+        <th class="title" colspan="2">Vehicle</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td class="label">Name</td>
+        <td>{{personalInfo.name}}</td>
+        <td class="label">Name</td>
+        <td>{{vehicle.name}}</td>
+    </tr>
+    <tr>
+        <td class="label">Identity Card Series</td>
+        <td>{{personalInfo.identityCardSeries}}</td>
+        <td class="label">Registration Number</td>
+        <td>{{vehicle.registrationNr}}</td>
+    </tr>
+    <tr>
+        <td class="label">Identity Card Nr</td>
+        <td>{{personalInfo.identityCardNr}}</td>
+        <td class="label">Chassis Series/ CIV Series</td>
+        <td>{{vehicle.chassisSeries}}/ {{vehicle.civSeries}}</td>
+    </tr>
+    <tr>
+        <td class="label">Code</td>
+        <td>{{personalInfo.code}}</td>
+        <td class="label">Cylindrical Capacity/ Maximal Net Power</td>
+        <td>{{vehicle.cylindricalCapacity}}/ {{vehicle.maxNetPower}}</td>
+    </tr>
+    <tr>
+        <td class="label">Address</td>
+        <td>{{address}}</td>
+        <td class="label">Number of seats/ Maximal Total Mass</td>
+        <td>{{vehicle.seatsNr}}/ {{vehicle.maxTotalMass}}</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

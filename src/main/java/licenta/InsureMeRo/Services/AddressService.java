@@ -18,8 +18,9 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    public void addAddress(Address address) {
+    public Address addAddress(Address address) {
         addressRepository.save(address);
+        return address;
     }
 
     public List<Address> getAddresses() {

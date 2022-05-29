@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Set permissions on endpoints
         //http.authorizeRequests().anyRequest().permitAll(); //it's like you don't have any security
         http.authorizeRequests().antMatchers("/login", "/user/getRefreshToken",
-                "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/swagger-ui/**","/user/addUser").permitAll();
+                "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/swagger-ui/**","/user/addUser","/insurance/getInsurancePdf").permitAll();
         http.authorizeRequests().antMatchers("**").hasAnyAuthority("CLIENT", "ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         // Add authentication and authorization filter
@@ -58,19 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
-//        @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-//        configuration.setAllowCredentials(true);
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-//        configuration.setExposedHeaders(Arrays.asList("custom-header1", "custom-header2"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
 
 // Used by spring security if CORS is enabled.
     @Bean

@@ -34,7 +34,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         if (request.getServletPath().equals("/login") || request.getServletPath().equals("/user/getRefreshToken")
                 || request.getServletPath().equals("/user/addUser")
                 || request.getServletPath().equals("/swagger-resources/**") || request.getServletPath().equals("/v2/api-docs")
-                || request.getServletPath().equals("/swagger-resources") || request.getServletPath().equals("/swagger-ui/**")) {
+                || request.getServletPath().equals("/swagger-resources") || request.getServletPath().equals("/swagger-ui/**")
+                || request.getServletPath().equals("/insurance/getInsurancePdf")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader(AUTHORIZATION);

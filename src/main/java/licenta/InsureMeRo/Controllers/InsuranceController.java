@@ -7,6 +7,9 @@ import licenta.InsureMeRo.dto.InsuranceInfoDTO;
 import licenta.InsureMeRo.dto.PersonalInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +76,8 @@ public class InsuranceController {
                 insuranceDTO.setPersonalInfo(personalInfo);
                 Vehicle vehicle = vehicleService.getVehicleById(insurance.getVehicleId()).get();
                 insuranceDTO.setVehicle(vehicle);
+                Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
+                insuranceDTO.setAddress(address);
 
                 insuranceDTOList.add(insuranceDTO);
             }
@@ -80,18 +85,31 @@ public class InsuranceController {
         return insuranceDTOList;
     }
 
+    @GetMapping(value = "/getInsurancePdf")
+    public ResponseEntity<byte[]> getInsuranceAsPdf() {
+        try {
+            HtmlToPdf htmlToPdf = new HtmlToPdf();
+            var ceva = htmlToPdf.generateHtmlToPdf();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            return ResponseEntity.ok().headers(headers).body(ceva);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @GetMapping("/getPersonalInfoForCurrentUser")
-    public Set<PersonalInfoDTO> getPersonalInfoForCurrentUser() {
+    public List<PersonalInfoDTO> getPersonalInfoForCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
 
         List<Insurance> insurancesList = insuranceService.getInsurances();
-        Set<PersonalInfoDTO> personalInfoDTOSet = new HashSet<>();
-
-        PersonalInfoDTO personalInfoDTO = new PersonalInfoDTO();
+        Map<String, PersonalInfoDTO> personalInfoDTOMap = new HashMap<>();
 
         for (Insurance insurance : insurancesList) {
             if (insurance.getUserId() == user.getId()) {
+                PersonalInfoDTO personalInfoDTO = new PersonalInfoDTO();
 
                 PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
                 personalInfoDTO.setPersonalInfo(personalInfo);
@@ -99,14 +117,19 @@ public class InsuranceController {
                 Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
                 personalInfoDTO.setAddress(address);
 
-                personalInfoDTOSet.add(personalInfoDTO);
+                personalInfoDTOMap.put(personalInfoDTO.getPersonalInfo().getCode(), personalInfoDTO);
             }
         }
-        return personalInfoDTOSet;
+        log.info(String.valueOf(personalInfoDTOMap.size()));
+        List<PersonalInfoDTO> finalPersonalInfoList = new ArrayList<>();
+        for (Map.Entry<String, PersonalInfoDTO> entry : personalInfoDTOMap.entrySet()) {
+            finalPersonalInfoList.add(entry.getValue());
+        }
+        return finalPersonalInfoList;
     }
 
     @PostMapping("/addInsurance")
-    public void addInsurance(@RequestBody InsuranceInfoDTO insuranceInfoDTO) {
+    public ResponseEntity<Long> addInsurance(@RequestBody InsuranceInfoDTO insuranceInfoDTO) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
@@ -123,6 +146,8 @@ public class InsuranceController {
         insurance.setVehicleId(vehicle.getId());
 
         PersonalInfo personalInfo = personalInfoService.addPersonalInfo(insuranceInfoDTO.getPersonalInfo());
+        Address address = addressService.addAddress(insuranceInfoDTO.getAddress());
+        personalInfo.setAddressId(address.getId());
         insurance.setPersonalInfoId(personalInfo.getId());
 
         insuranceService.addInsurance(insurance);
@@ -139,6 +164,7 @@ public class InsuranceController {
             float newPrice = insuranceService.calculatePrice(insuranceInfoDTO.getMonths(), personalInfo);
             insuranceService.updatePrice(insuranceId, newPrice);
         }
+        return ResponseEntity.ok().body(insuranceId);
     }
 
 

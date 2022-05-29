@@ -14,20 +14,20 @@ public class DriverService {
     private final DriverRepository driverRepository;
 
     @Autowired
-    public DriverService(DriverRepository  driverRepository) {
-        this. driverRepository =  driverRepository;
+    public DriverService(DriverRepository driverRepository) {
+        this.driverRepository = driverRepository;
     }
 
     public void addDriver(Driver driver) {
-        driverRepository.save( driver);
+        driverRepository.save(driver);
     }
 
     public List<Driver> getDrivers() {
-        return  driverRepository.findAll();
+        return driverRepository.findAll();
     }
 
     public Optional<Driver> getDriverById(Long id) {
-        return  driverRepository.findById(id);
+        return driverRepository.findById(id);
     }
 
     public void deleteDriver(Long id) {
