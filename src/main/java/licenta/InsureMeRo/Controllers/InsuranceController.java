@@ -29,7 +29,6 @@ public class InsuranceController {
     private final AddressService addressService;
     private final VehicleService vehicleService;
     private final DriverService driverService;
-
     private final UserService userService;
 
     // standard constructors, dependency injection
@@ -48,13 +47,7 @@ public class InsuranceController {
         List<Insurance> insurancesList = insuranceService.getInsurances();
         List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
         for (Insurance insurance : insurancesList) {
-            InsuranceDTO insuranceDTO = new InsuranceDTO();
-            insuranceDTO.setInsurance(insurance);
-            PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
-            insuranceDTO.setPersonalInfo(personalInfo);
-            Vehicle vehicle = vehicleService.getVehicleById(insurance.getVehicleId()).get();
-            insuranceDTO.setVehicle(vehicle);
-
+            InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
             insuranceDTOList.add(insuranceDTO);
         }
         return insuranceDTOList;
@@ -70,26 +63,20 @@ public class InsuranceController {
 
         for (Insurance insurance : insurancesList) {
             if (insurance.getUserId() == user.getId()) {
-                InsuranceDTO insuranceDTO = new InsuranceDTO();
-                insuranceDTO.setInsurance(insurance);
-                PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
-                insuranceDTO.setPersonalInfo(personalInfo);
-                Vehicle vehicle = vehicleService.getVehicleById(insurance.getVehicleId()).get();
-                insuranceDTO.setVehicle(vehicle);
-                Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
-                insuranceDTO.setAddress(address);
-
+                InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
                 insuranceDTOList.add(insuranceDTO);
             }
         }
         return insuranceDTOList;
     }
 
-    @GetMapping(value = "/getInsurancePdf")
-    public ResponseEntity<byte[]> getInsuranceAsPdf() {
+    @GetMapping(value = "/getInsurancePdf/{id}")
+    public ResponseEntity<byte[]> getInsuranceAsPdf(@PathVariable("id") Long id) {
         try {
             HtmlToPdf htmlToPdf = new HtmlToPdf();
-            var ceva = htmlToPdf.generateHtmlToPdf();
+            Insurance insurance=getInsuranceById(id);
+            InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
+            var ceva = htmlToPdf.generateHtmlToPdf(insuranceDTO);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             return ResponseEntity.ok().headers(headers).body(ceva);
@@ -178,6 +165,16 @@ public class InsuranceController {
         insuranceService.deleteInsurance(id);
     }
 
-    //update
+    private InsuranceDTO insuranceToInsuranceDTO(Insurance insurance) {
+        InsuranceDTO insuranceDTO = new InsuranceDTO();
+        insuranceDTO.setInsurance(insurance);
+        PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
+        insuranceDTO.setPersonalInfo(personalInfo);
+        Vehicle vehicle = vehicleService.getVehicleById(insurance.getVehicleId()).get();
+        insuranceDTO.setVehicle(vehicle);
+        Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
+        insuranceDTO.setAddress(address);
+        return insuranceDTO;
+    }
 
 }

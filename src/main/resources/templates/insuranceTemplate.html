@@ -5,6 +5,45 @@
     <title>Title</title>
 </head>
 <style>
+    .insurance-content {
+        position: relative;
+    }
+
+    #logo {
+        width: 300px;
+    }
+
+    .nr {
+        position: absolute;
+        right: 0px;
+        top: 7px;
+        font-weight: bold;
+    }
+
+    .valability {
+        position: absolute;
+        right: 0px;
+        top: 20%;
+
+    }
+
+    .valability > table, .valability tr, .valability td {
+        border: none;
+    }
+
+    .valability td {
+        width: 80px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    .insurance-info {
+        margin-top: 100px;
+        margin-bottom: 50px;
+    }
     .title {
         text-align: center;
     }
@@ -13,82 +52,80 @@
         font-weight: bold;
     }
 
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-
-    .valability, .insurance-info {
-        margin: 10px;
-    }
-
-    #logo {
-        width: 300px;
+    span{
+        font-weight: bold;
     }
 
 </style>
 <body>
-<img id="logo" src="logoInsureMeRo.png" alt="logo">
-<table class="valability">
-    <thead>
-    <tr>
-        <th class="title" colspan="2">Valid</th>
-    </tr>
-    <tr>
-        <th>From</th>
-        <th>To</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>
-            {{from}}
-        </td>
-        <td>
-            {{to}}
-        </td>
-    </tr>
-    </tbody>
-</table>
-<table class="insurance-info">
-    <thead>
-    <tr>
-        <th class="title" colspan="2">Owner</th>
-        <th class="title" colspan="2">Vehicle</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td class="label">Name</td>
-        <td>{{personalInfo.name}}</td>
-        <td class="label">Name</td>
-        <td>{{vehicle.name}}</td>
-    </tr>
-    <tr>
-        <td class="label">Identity Card Series</td>
-        <td>{{personalInfo.identityCardSeries}}</td>
-        <td class="label">Registration Number</td>
-        <td>{{vehicle.registrationNr}}</td>
-    </tr>
-    <tr>
-        <td class="label">Identity Card Nr</td>
-        <td>{{personalInfo.identityCardNr}}</td>
-        <td class="label">Chassis Series/ CIV Series</td>
-        <td>{{vehicle.chassisSeries}}/ {{vehicle.civSeries}}</td>
-    </tr>
-    <tr>
-        <td class="label">Code</td>
-        <td>{{personalInfo.code}}</td>
-        <td class="label">Cylindrical Capacity/ Maximal Net Power</td>
-        <td>{{vehicle.cylindricalCapacity}}/ {{vehicle.maxNetPower}}</td>
-    </tr>
-    <tr>
-        <td class="label">Address</td>
-        <td>{{address}}</td>
-        <td class="label">Number of seats/ Maximal Total Mass</td>
-        <td>{{vehicle.seatsNr}}/ {{vehicle.maxTotalMass}}</td>
-    </tr>
-    </tbody>
-</table>
+<div class="insurance-content">
+    <img id="logo" src="logoInsureMeRo.png" alt="logo">
+    <div class="nr">
+        <p> NR. {{nr.polita}}</p>
+    </div>
+    <div class="valability">
+        <table>
+            <tr>
+                <td>
+                    Valid from:
+                </td>
+                <td>
+                    {{from}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Valid to:
+                </td>
+                <td>
+                    {{to}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <table class="insurance-info">
+        <thead>
+        <tr>
+            <th class="title" colspan="2">Owner</th>
+            <th class="title" colspan="2">Vehicle</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="label">Name</td>
+            <td>{{personalInfo.name}}</td>
+            <td class="label">Name</td>
+            <td>{{vehicle.name}}</td>
+        </tr>
+        <tr>
+            <td class="label">Identity Card Series</td>
+            <td>{{personalInfo.identityCardSeries}}</td>
+            <td class="label">Registration Number</td>
+            <td>{{vehicle.registrationNr}}</td>
+        </tr>
+        <tr>
+            <td class="label">Identity Card Nr</td>
+            <td>{{personalInfo.identityCardNr}}</td>
+            <td class="label">Chassis Series/ CIV Series</td>
+            <td>{{vehicle.chassisSeries}}/ {{vehicle.civSeries}}</td>
+        </tr>
+        <tr>
+            <td class="label">Code</td>
+            <td>{{personalInfo.code}}</td>
+            <td class="label">Cylindrical Capacity/ Maximal Net Power</td>
+            <td>{{vehicle.cylindricalCapacity}}/ {{vehicle.maxNetPower}}</td>
+        </tr>
+        <tr>
+            <td class="label">Address</td>
+            <td>{{address}}</td>
+            <td class="label">Number of seats/ Maximal Total Mass</td>
+            <td>{{vehicle.seatsNr}}/ {{vehicle.maxTotalMass}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p>Contract issued on: {{issueDate}}<br>
+        Bonus-Malus Class: {{bonusMalus}} <br>
+        Insurance fee:: <span>{{price}} Lei</span></p>
+</div>
 </body>
 </html>
