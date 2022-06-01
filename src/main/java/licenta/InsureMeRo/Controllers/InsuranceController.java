@@ -30,16 +30,18 @@ public class InsuranceController {
     private final VehicleService vehicleService;
     private final DriverService driverService;
     private final UserService userService;
+    private final IncidentsService incidentsService;
 
     // standard constructors, dependency injection
     @Autowired
-    public InsuranceController(InsuranceService insuranceService, PersonalInfoService personalInfoService, AddressService addressService, VehicleService vehicleService, DriverService driverService, UserService userService) {
+    public InsuranceController(InsuranceService insuranceService, PersonalInfoService personalInfoService, AddressService addressService, VehicleService vehicleService, DriverService driverService, UserService userService, IncidentsService incidentsService) {
         this.insuranceService = insuranceService;
         this.personalInfoService = personalInfoService;
         this.addressService = addressService;
         this.vehicleService = vehicleService;
         this.driverService = driverService;
         this.userService = userService;
+        this.incidentsService = incidentsService;
     }
 
     @GetMapping("/getInsurances")
@@ -74,7 +76,7 @@ public class InsuranceController {
     public ResponseEntity<byte[]> getInsuranceAsPdf(@PathVariable("id") Long id) {
         try {
             HtmlToPdf htmlToPdf = new HtmlToPdf();
-            Insurance insurance=getInsuranceById(id);
+            Insurance insurance = getInsuranceById(id);
             InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
             var ceva = htmlToPdf.generateHtmlToPdf(insuranceDTO);
             HttpHeaders headers = new HttpHeaders();
@@ -135,6 +137,7 @@ public class InsuranceController {
         Address address = addressService.addAddress(insuranceInfoDTO.getAddress());
         insuranceInfoDTO.getPersonalInfo().setAddressId(address.getId());
         PersonalInfo personalInfo = personalInfoService.addPersonalInfo(insuranceInfoDTO.getPersonalInfo());
+        updateBonus(personalInfo.getId());
         insurance.setPersonalInfoId(personalInfo.getId());
 
         insuranceService.addInsurance(insurance);
@@ -153,7 +156,6 @@ public class InsuranceController {
         }
         return ResponseEntity.ok().body(insuranceId);
     }
-
 
     @GetMapping("/getInsuranceById/{id}")
     public Insurance getInsuranceById(@PathVariable("id") Long id) {
@@ -175,6 +177,13 @@ public class InsuranceController {
         Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
         insuranceDTO.setAddress(address);
         return insuranceDTO;
+    }
+
+    public void updateBonus(Long id) {
+        PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(id).get();
+        List<Incident> incidentList = incidentsService.getIncidentsByPersonalInfoId(id);
+        int nrInsurances = insuranceService.getNrInsurancesForGivenPersonalInfoId(id);
+        personalInfoService.updateBonus(personalInfo, incidentList.size(), nrInsurances);
     }
 
 }

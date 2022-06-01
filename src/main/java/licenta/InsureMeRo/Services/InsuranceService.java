@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,5 +110,23 @@ public class InsuranceService {
         if (insurance != null) {
             insuranceRepository.updatePrice(newPrice, id);
         }
+    }
+
+    public int getNrInsurancesForGivenPersonalInfoId(Long id) {
+        int nrInsurances = 0;
+        int nrInsuredMonths = 0;
+        for (Insurance insurance : getInsurances()) {
+            if (insurance.getPersonalInfoId() == id) {
+                nrInsurances++;
+                nrInsuredMonths = nrInsuredMonths + nrInsuredMonths(insurance);
+            }
+        }
+        return nrInsuredMonths / 12;
+    }
+
+    public int nrInsuredMonths(Insurance insurance) {
+        LocalDate from = insurance.getValidFrom().toLocalDate();
+        LocalDate to = insurance.getValidTo().toLocalDate();
+        return (int) (ChronoUnit.DAYS.between(from, to) / 30);
     }
 }
