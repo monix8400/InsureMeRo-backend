@@ -1,7 +1,7 @@
 package licenta.InsureMeRo.dto;
 
-import licenta.InsureMeRo.Models.Address;
-import licenta.InsureMeRo.Models.PersonalInfo;
+import licenta.InsureMeRo.models.Address;
+import licenta.InsureMeRo.models.PersonalInfo;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

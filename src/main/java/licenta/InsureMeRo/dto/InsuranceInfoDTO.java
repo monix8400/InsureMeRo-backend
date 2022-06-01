@@ -1,6 +1,6 @@
 package licenta.InsureMeRo.dto;
 
-import licenta.InsureMeRo.Models.*;
+import licenta.InsureMeRo.models.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
