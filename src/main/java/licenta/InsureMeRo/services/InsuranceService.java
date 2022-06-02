@@ -52,9 +52,37 @@ public class InsuranceService {
     }
 
     public float calculatePrice(int nrMonths, PersonalInfo personalInfo) {
-        float ageFactor = nrMonths == 12 ? 0.7f : 0.8f;
         float standardPrice = insuranceSettingsService.getInsuranceSettingsById(1L).get().getStandardPrice();
-        return standardPrice * nrMonths * ageFactor * getAge(personalInfo.getCode()) * getBonusMalusFromPersonalInfo(personalInfo);
+        if (personalInfo.getPersonType() == PersonType.INDIVIDUAL) {
+            float ageFactor = nrMonths == 12 ? 0.7f : 0.8f;
+            return standardPrice * nrMonths * ageFactor * getAge(personalInfo.getCode()) * getBonusMalusFromPersonalInfo(personalInfo);
+        } else {
+            return standardPrice * nrMonths * insuredVehicles(personalInfo.getId()) * getBonusMalusFromPersonalInfo(personalInfo);
+        }
+    }
+
+    private float insuredVehicles(Long personalInfoId) {
+        int nrInsuredVehicles = nrInsuredVehicles(personalInfoId);
+        if (nrInsuredVehicles >= 0 && nrInsuredVehicles <= 5) {
+            return 1;
+        } else if (nrInsuredVehicles > 5 && nrInsuredVehicles <= 25) {
+            return 0.9f;
+        } else if (nrInsuredVehicles > 25 && nrInsuredVehicles <= 50) {
+            return 0.8f;
+        } else {
+            return 0.7f;
+        }
+
+    }
+
+    private int nrInsuredVehicles(long personalInfoId) {
+        int nrInsuredVehicles = 0;
+        for (Insurance insurance : getInsurances()) {
+            if (insurance.getPersonalInfoId()==personalInfoId) {
+                nrInsuredVehicles++;
+            }
+        }
+        return nrInsuredVehicles;
     }
 
     private float getBonusMalusFromPersonalInfo(PersonalInfo personalInfo) {

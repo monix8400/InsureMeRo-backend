@@ -137,7 +137,7 @@ public class InsuranceController {
         Address address = addressService.addAddress(insuranceInfoDTO.getAddress());
         insuranceInfoDTO.getPersonalInfo().setAddressId(address.getId());
         PersonalInfo personalInfo = personalInfoService.addPersonalInfo(insuranceInfoDTO.getPersonalInfo());
-        updateBonus(personalInfo.getId());
+//        updateBonus(personalInfo.getId());
         insurance.setPersonalInfoId(personalInfo.getId());
 
         insuranceService.addInsurance(insurance);
