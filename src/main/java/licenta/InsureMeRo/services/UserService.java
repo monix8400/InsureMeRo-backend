@@ -27,7 +27,10 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void addUser(User user) {
+    public void addUser(User user) throws Exception {
+        if(getUserByEmail(user.getEmail()).isPresent()){
+            throw new Exception("You already have an acount!");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("CLIENT");
         userRepository.save(user);

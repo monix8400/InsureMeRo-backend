@@ -9,6 +9,9 @@ import licenta.InsureMeRo.models.User;
 import licenta.InsureMeRo.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +43,13 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public void addUser(@RequestBody User user) {
-        userService.addUser(user);
+    public ResponseEntity<String> addUser(@RequestBody User user) {
+        try {
+            userService.addUser(user);
+            return ResponseEntity.status(HttpStatus.OK).body("Successfully registered!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
+        }
     }
 
     @GetMapping("/getUserById/{id}")
@@ -65,11 +73,7 @@ public class UserController {
                 DecodedJWT decodedJWT = verifier.verify(refreshToken);
                 String username = decodedJWT.getSubject();
                 User user = userService.getUserByEmail(username).get();
-                String accessToken = JWT.create()
-                        .withSubject(user.getEmail())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
-                        .withIssuer(request.getRequestURL().toString())
-                        .withClaim("roles", new ArrayList<>().add(user.getRole()))//user.getRole().stream().map(GrantedAuthority::getAuthority).toList()
+                String accessToken = JWT.create().withSubject(user.getEmail()).withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000)).withIssuer(request.getRequestURL().toString()).withClaim("roles", new ArrayList<>().add(user.getRole()))//user.getRole().stream().map(GrantedAuthority::getAuthority).toList()
                         .sign(algorithm);
 //                response.setHeader("accessToken", accessToken);
 //                response.setHeader("refreshToken", refreshToken);
