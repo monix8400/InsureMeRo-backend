@@ -104,5 +104,21 @@ public class UserController {
         return userService.getUserByEmail(email);
     }
 
-    //update
+    @PostMapping("/updateFirstname")
+    public void updateUserFirstname(@RequestBody String firstname, Authentication auth) {
+        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
+        userService.updateFirstname(firstname, user.getId());
+    }
+
+    @PostMapping("/updateLastname")
+    public void updateUserLastname(@RequestBody String lastname, Authentication auth) {
+        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
+        userService.updateLastname(lastname, user.getId());
+    }
+
+    @PostMapping("/updateEmail")
+    public void updateUserEmail(@RequestBody String email, Authentication auth) {
+        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
+        userService.updateEmail(email, user.getId());
+    }
 }

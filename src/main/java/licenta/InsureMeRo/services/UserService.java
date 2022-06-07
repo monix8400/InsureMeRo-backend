@@ -28,7 +28,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void addUser(User user) throws Exception {
-        if(getUserByEmail(user.getEmail()).isPresent()){
+        if (getUserByEmail(user.getEmail()).isPresent()) {
             throw new Exception("You already have an acount!");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -60,5 +60,15 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
-    //update
+    public void updateFirstname(String firstname, Long id){
+        userRepository.updateFirstname(firstname, id);
+    }
+
+    public void updateLastname(String lastname, Long id){
+        userRepository.updateLastname(lastname, id);
+    }
+
+    public void updateEmail(String email, Long id){
+        userRepository.updateEmail(email, id);
+    }
 }

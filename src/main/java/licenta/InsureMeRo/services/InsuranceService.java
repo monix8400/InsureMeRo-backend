@@ -53,11 +53,11 @@ public class InsuranceService {
 
     public float calculatePrice(int nrMonths, PersonalInfo personalInfo) {
         float standardPrice = insuranceSettingsService.getInsuranceSettingsById(1L).get().getStandardPrice();
+        float monthsFactor = nrMonths == 12 ? 0.7f : 0.8f;
         if (personalInfo.getPersonType() == PersonType.INDIVIDUAL) {
-            float ageFactor = nrMonths == 12 ? 0.7f : 0.8f;
-            return standardPrice * nrMonths * ageFactor * getAge(personalInfo.getCode()) * getBonusMalusFromPersonalInfo(personalInfo);
+            return standardPrice * nrMonths * monthsFactor * getAge(personalInfo.getCode()) * getBonusMalusFromPersonalInfo(personalInfo);
         } else {
-            return standardPrice * nrMonths * insuredVehicles(personalInfo.getId()) * getBonusMalusFromPersonalInfo(personalInfo);
+            return standardPrice * nrMonths * monthsFactor * insuredVehicles(personalInfo.getId()) * getBonusMalusFromPersonalInfo(personalInfo);
         }
     }
 
@@ -78,7 +78,7 @@ public class InsuranceService {
     private int nrInsuredVehicles(long personalInfoId) {
         int nrInsuredVehicles = 0;
         for (Insurance insurance : getInsurances()) {
-            if (insurance.getPersonalInfoId()==personalInfoId) {
+            if (insurance.getPersonalInfoId() == personalInfoId) {
                 nrInsuredVehicles++;
             }
         }
@@ -144,7 +144,7 @@ public class InsuranceService {
         int nrInsurances = 0;
         int nrInsuredMonths = 0;
         for (Insurance insurance : getInsurances()) {
-            if (insurance.getPersonalInfoId() == id) {
+            if (insurance.getPersonalInfoId().equals(id)) {
                 nrInsurances++;
                 nrInsuredMonths = nrInsuredMonths + nrInsuredMonths(insurance);
             }

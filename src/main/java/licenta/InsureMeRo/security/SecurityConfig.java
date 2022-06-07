@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Set permissions on endpoints
         //http.authorizeRequests().anyRequest().permitAll(); //it's like you don't have any security
         http.authorizeRequests().antMatchers("/login", "/user/getRefreshToken",
-                "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/swagger-ui/**","/user/addUser","/insurance/getInsurancePdf/**").permitAll();
+                "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/swagger-ui/**", "/user/addUser").permitAll();
         http.authorizeRequests().antMatchers("**").hasAnyAuthority("CLIENT", "ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         // Add authentication and authorization filter
@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-// Used by spring security if CORS is enabled.
+    // Used by spring security if CORS is enabled.
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source =

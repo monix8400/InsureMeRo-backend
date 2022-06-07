@@ -44,79 +44,6 @@ public class InsuranceController {
         this.incidentsService = incidentsService;
     }
 
-    @GetMapping("/getInsurances")
-    public List<InsuranceDTO> getInsurances() {
-        List<Insurance> insurancesList = insuranceService.getInsurances();
-        List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
-        for (Insurance insurance : insurancesList) {
-            InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
-            insuranceDTOList.add(insuranceDTO);
-        }
-        return insuranceDTOList;
-    }
-
-    @GetMapping("/getInsurancesForCurrentUser")
-    public List<InsuranceDTO> getInsurancesForCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
-
-        List<Insurance> insurancesList = insuranceService.getInsurances();
-        List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
-
-        for (Insurance insurance : insurancesList) {
-            if (insurance.getUserId() == user.getId()) {
-                InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
-                insuranceDTOList.add(insuranceDTO);
-            }
-        }
-        return insuranceDTOList;
-    }
-
-    @GetMapping(value = "/getInsurancePdf/{id}")
-    public ResponseEntity<byte[]> getInsuranceAsPdf(@PathVariable("id") Long id) {
-        try {
-            HtmlToPdf htmlToPdf = new HtmlToPdf();
-            Insurance insurance = getInsuranceById(id);
-            InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
-            var ceva = htmlToPdf.generateHtmlToPdf(insuranceDTO);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            return ResponseEntity.ok().headers(headers).body(ceva);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @GetMapping("/getPersonalInfoForCurrentUser")
-    public List<PersonalInfoDTO> getPersonalInfoForCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
-
-        List<Insurance> insurancesList = insuranceService.getInsurances();
-        Map<String, PersonalInfoDTO> personalInfoDTOMap = new HashMap<>();
-
-        for (Insurance insurance : insurancesList) {
-            if (insurance.getUserId() == user.getId()) {
-                PersonalInfoDTO personalInfoDTO = new PersonalInfoDTO();
-
-                PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
-                personalInfoDTO.setPersonalInfo(personalInfo);
-
-                Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
-                personalInfoDTO.setAddress(address);
-
-                personalInfoDTOMap.put(personalInfoDTO.getPersonalInfo().getCode(), personalInfoDTO);
-            }
-        }
-        log.info(String.valueOf(personalInfoDTOMap.size()));
-        List<PersonalInfoDTO> finalPersonalInfoList = new ArrayList<>();
-        for (Map.Entry<String, PersonalInfoDTO> entry : personalInfoDTOMap.entrySet()) {
-            finalPersonalInfoList.add(entry.getValue());
-        }
-        return finalPersonalInfoList;
-    }
-
     @PostMapping("/addInsurance")
     public ResponseEntity<Long> addInsurance(@RequestBody InsuranceInfoDTO insuranceInfoDTO) {
 
@@ -157,10 +84,123 @@ public class InsuranceController {
         return ResponseEntity.ok().body(insuranceId);
     }
 
+    @GetMapping("/getInsurances")
+    public List<InsuranceDTO> getInsurances() {
+        List<Insurance> insurancesList = insuranceService.getInsurances();
+        List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
+        for (Insurance insurance : insurancesList) {
+            InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
+            insuranceDTOList.add(insuranceDTO);
+        }
+        return insuranceDTOList;
+    }
+
     @GetMapping("/getInsuranceById/{id}")
     public Insurance getInsuranceById(@PathVariable("id") Long id) {
         return insuranceService.getInsuranceById(id).orElse(null);
     }
+
+    @GetMapping("/getInsurancesForCurrentUser")
+    public List<InsuranceDTO> getInsurancesForCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
+
+        List<Insurance> insurancesList = insuranceService.getInsurances();
+        List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
+
+        for (Insurance insurance : insurancesList) {
+            if (insurance.getUserId() == user.getId()) {
+                InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
+                insuranceDTOList.add(insuranceDTO);
+            }
+        }
+        return insuranceDTOList;
+    }
+
+    @GetMapping(value = "/getInsurancePdf/{id}")
+    public ResponseEntity<byte[]> getInsuranceAsPdf(@PathVariable("id") Long id) {
+        try {
+            HtmlToPdf htmlToPdf = new HtmlToPdf();
+            Insurance insurance = getInsuranceById(id);
+            InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
+            var ceva = htmlToPdf.generateHtmlToPdf(insuranceDTO);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            return ResponseEntity.ok().headers(headers).body(ceva);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @GetMapping("/getPersonalInfoForCurrentUser/{id}")
+    public List<PersonalInfoDTO> getPersonalInfoForCurrentUser(@PathVariable("id") Long id) {
+        PersonType personType;
+        if (id == 0) {
+            personType = PersonType.INDIVIDUAL;
+        } else {
+            personType = PersonType.LEGAL_PERSON;
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
+
+        List<Insurance> insurancesList = insuranceService.getInsurances();
+        Map<String, PersonalInfoDTO> personalInfoDTOMap = new HashMap<>();
+
+        for (Insurance insurance : insurancesList) {
+            if (insurance.getUserId() == user.getId()) {
+                PersonalInfoDTO personalInfoDTO = new PersonalInfoDTO();
+
+                PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
+                if (personalInfo.getPersonType().equals(personType)) {
+                    personalInfoDTO.setPersonalInfo(personalInfo);
+
+                    Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
+                    personalInfoDTO.setAddress(address);
+
+                    personalInfoDTOMap.put(personalInfoDTO.getPersonalInfo().getCode(), personalInfoDTO);
+                }
+            }
+        }
+        log.info(String.valueOf(personalInfoDTOMap.size()));
+        List<PersonalInfoDTO> finalPersonalInfoList = new ArrayList<>();
+        for (Map.Entry<String, PersonalInfoDTO> entry : personalInfoDTOMap.entrySet()) {
+            finalPersonalInfoList.add(entry.getValue());
+        }
+        return finalPersonalInfoList;
+    }
+
+//    @GetMapping("/getVehiclesForCurrentUser/")
+//    public List<PersonalInfoDTO> getVehiclesForCurrentUser() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
+//
+//        List<Insurance> insurancesList = insuranceService.getInsurances();
+//        Map<String, PersonalInfoDTO> personalInfoDTOMap = new HashMap<>();
+//
+//        for (Insurance insurance : insurancesList) {
+//            if (insurance.getUserId() == user.getId()) {
+//                PersonalInfoDTO personalInfoDTO = new PersonalInfoDTO();
+//
+//                PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
+//
+//                personalInfoDTO.setPersonalInfo(personalInfo);
+//
+//                Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
+//                personalInfoDTO.setAddress(address);
+//
+//                personalInfoDTOMap.put(personalInfoDTO.getPersonalInfo().getCode(), personalInfoDTO);
+//
+//            }
+//        }
+//        log.info(String.valueOf(personalInfoDTOMap.size()));
+//        List<PersonalInfoDTO> finalPersonalInfoList = new ArrayList<>();
+//        for (Map.Entry<String, PersonalInfoDTO> entry : personalInfoDTOMap.entrySet()) {
+//            finalPersonalInfoList.add(entry.getValue());
+//        }
+//        return finalPersonalInfoList;
+//    }
 
     @DeleteMapping("/deleteInsuranceById/{id}")
     public void deleteInsuranceById(@PathVariable("id") Long id) {
@@ -179,7 +219,8 @@ public class InsuranceController {
         return insuranceDTO;
     }
 
-    public void updateBonus(Long id) {
+    @PostMapping("/bonus/{id}")
+    public void updateBonus(@PathVariable("id") Long id) {
         PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(id).get();
         List<Incident> incidentList = incidentsService.getIncidentsByPersonalInfoId(id);
         int nrInsurances = insuranceService.getNrInsurancesForGivenPersonalInfoId(id);

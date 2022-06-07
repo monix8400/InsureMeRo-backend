@@ -85,6 +85,10 @@ public class PersonalInfoService {
         int currentBonus = getBonusStringToInt(personalInfo.getBonusMalus());
         if (currentBonus >= 0) {
             if (nrIncidents >= 2) {
+                if (currentBonus == 0) {
+                    currentBonus = currentBonus - 2;
+                    personalInfoRepository.updateBonus(getBonusIntToString(currentBonus), personalInfo.getCode());
+                }
                 personalInfoRepository.updateBonus("b0", personalInfo.getCode());
             } else if (nrIncidents == 1) {
                 currentBonus = currentBonus - 1;
