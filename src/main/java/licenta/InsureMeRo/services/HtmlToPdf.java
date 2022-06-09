@@ -28,9 +28,9 @@ public class HtmlToPdf {
         Document doc = createWellFormedHtml(inputHTML);
         xhtmlToPdf(doc, PDF_OUTPUT);
 
-        var ceva = readAndDelete(PDF_OUTPUT);
+        var pdfFile = readAndDelete(PDF_OUTPUT);
         Files.deleteIfExists(Path.of(HTML_NEW_INPUT));
-        return ceva;
+        return pdfFile;
     }
 
     private Document createWellFormedHtml(File inputHTML) throws IOException {

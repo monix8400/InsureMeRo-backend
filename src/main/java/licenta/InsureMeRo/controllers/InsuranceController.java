@@ -123,10 +123,10 @@ public class InsuranceController {
             HtmlToPdf htmlToPdf = new HtmlToPdf();
             Insurance insurance = getInsuranceById(id);
             InsuranceDTO insuranceDTO = insuranceToInsuranceDTO(insurance);
-            var ceva = htmlToPdf.generateHtmlToPdf(insuranceDTO);
+            var pdfFile = htmlToPdf.generateHtmlToPdf(insuranceDTO);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            return ResponseEntity.ok().headers(headers).body(ceva);
+            return ResponseEntity.ok().headers(headers).body(pdfFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
