@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InsuranceSettings{
+public class InsuranceSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

@@ -13,7 +13,6 @@ import java.util.List;
 public class AddressController {
     private final AddressService addressService;
 
-    // standard constructors, dependency injection
     @Autowired
     public AddressController(AddressService addressService) {
         this.addressService = addressService;
@@ -38,8 +37,6 @@ public class AddressController {
     public void deleteAddressById(@PathVariable("id") Long id) {
         addressService.deleteAddress(id);
     }
-
-    //update
 
 }
 

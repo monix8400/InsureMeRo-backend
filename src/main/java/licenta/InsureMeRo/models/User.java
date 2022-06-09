@@ -26,9 +26,6 @@ public class User {
     @Column(name = "role", columnDefinition = "varchar(255) default 'CLIENT'")
     private String role;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Insurance> insurances = new ArrayList<>();
-
 
     public long getId() {
         return id;
@@ -87,7 +84,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
-//                ", insurances=" + insurances +
                 '}';
     }
 }

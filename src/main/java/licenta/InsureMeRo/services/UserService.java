@@ -55,20 +55,20 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username).get();
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>(); //lista authorities per user
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole()));
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
-    public void updateFirstname(String firstname, Long id){
+    public void updateFirstname(String firstname, Long id) {
         userRepository.updateFirstname(firstname, id);
     }
 
-    public void updateLastname(String lastname, Long id){
+    public void updateLastname(String lastname, Long id) {
         userRepository.updateLastname(lastname, id);
     }
 
-    public void updateEmail(String email, Long id){
+    public void updateEmail(String email, Long id) {
         userRepository.updateEmail(email, id);
     }
 }

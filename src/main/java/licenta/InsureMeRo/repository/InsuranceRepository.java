@@ -13,5 +13,5 @@ public interface InsuranceRepository extends JpaRepository<Insurance, Long> {
     @Transactional
     @Modifying
     @Query("UPDATE Insurance SET price = ?1 where id=?2")
-    void updatePrice(float newPrice,Long id);
+    void updatePrice(float newPrice, Long id);
 }

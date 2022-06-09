@@ -67,18 +67,16 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authentication) throws IOException {
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes()); //ar trebui sa fie altfel mnu "secret"
+        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         String accessToken = JWT.create().withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                 .sign(algorithm);
         String refreshToken = JWT.create().withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))//valabil 30 min
+                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))//valid 30 min
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
-//        response.setHeader("accessToken", accessToken);
-//        response.setHeader("refreshToken", refreshToken);
         Map<String, String> tokens = new HashMap<>();
         tokens.put("accessToken", accessToken);
         tokens.put("refreshToken", refreshToken);

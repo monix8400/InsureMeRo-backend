@@ -24,16 +24,10 @@ public class Insurance {
     private Date validTo;
     @Column(name = "price")
     private float price;
-
-    //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "personal_info_id")
-    private Long personalInfoId;//PersonalInfo personalInfo;
-
-    //    @OneToOne(cascade = CascadeType.ALL)
+    private Long personalInfoId;
     @JoinColumn(name = "vehicle_id")
     private Long vehicleId;
-
-    //    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Long userId;//User user;
 
@@ -76,31 +70,6 @@ public class Insurance {
     public void setPrice(float price) {
         this.price = price;
     }
-
-//    public PersonalInfo getPersonalInfo() {
-//        return personalInfo;
-//    }
-//
-//    public void setPersonalInfo(PersonalInfo personalInfo) {
-//        this.personalInfo = personalInfo;
-//    }
-//
-//    public Vehicle getVehicle() {
-//        return vehicle;
-//    }
-//
-//    public void setVehicle(Vehicle vehicle) {
-//        this.vehicle = vehicle;
-//    }
-//
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-
 
     public Long getPersonalInfoId() {
         return personalInfoId;

@@ -32,7 +32,6 @@ public class InsuranceController {
     private final UserService userService;
     private final IncidentsService incidentsService;
 
-    // standard constructors, dependency injection
     @Autowired
     public InsuranceController(InsuranceService insuranceService, PersonalInfoService personalInfoService, AddressService addressService, VehicleService vehicleService, DriverService driverService, UserService userService, IncidentsService incidentsService) {
         this.insuranceService = insuranceService;
@@ -170,37 +169,6 @@ public class InsuranceController {
         }
         return finalPersonalInfoList;
     }
-
-//    @GetMapping("/getVehiclesForCurrentUser/")
-//    public List<PersonalInfoDTO> getVehiclesForCurrentUser() {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        User user = userService.getUserByEmail((String) auth.getPrincipal()).get();
-//
-//        List<Insurance> insurancesList = insuranceService.getInsurances();
-//        Map<String, PersonalInfoDTO> personalInfoDTOMap = new HashMap<>();
-//
-//        for (Insurance insurance : insurancesList) {
-//            if (insurance.getUserId() == user.getId()) {
-//                PersonalInfoDTO personalInfoDTO = new PersonalInfoDTO();
-//
-//                PersonalInfo personalInfo = personalInfoService.getPersonalInfoById(insurance.getPersonalInfoId()).get();
-//
-//                personalInfoDTO.setPersonalInfo(personalInfo);
-//
-//                Address address = addressService.getAddressById(personalInfo.getAddressId()).get();
-//                personalInfoDTO.setAddress(address);
-//
-//                personalInfoDTOMap.put(personalInfoDTO.getPersonalInfo().getCode(), personalInfoDTO);
-//
-//            }
-//        }
-//        log.info(String.valueOf(personalInfoDTOMap.size()));
-//        List<PersonalInfoDTO> finalPersonalInfoList = new ArrayList<>();
-//        for (Map.Entry<String, PersonalInfoDTO> entry : personalInfoDTOMap.entrySet()) {
-//            finalPersonalInfoList.add(entry.getValue());
-//        }
-//        return finalPersonalInfoList;
-//    }
 
     @DeleteMapping("/deleteInsuranceById/{id}")
     public void deleteInsuranceById(@PathVariable("id") Long id) {

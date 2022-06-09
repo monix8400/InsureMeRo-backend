@@ -24,11 +24,10 @@ public class PersonalInfo {
     private String identityCardSeries;
     @Column(name = "identity_card_nr")
     private String identityCardNr;
-    @Column(name = "code") //cnp/cui
+    @Column(name = "code")
     private String code;
-    //    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Long addressId;//Address address;
+    private Long addressId;
     @Column(name = "bonus_malus", columnDefinition = "varchar(255) default 'b0'")
     private String bonusMalus = "b0";
 
@@ -80,15 +79,6 @@ public class PersonalInfo {
     public void setCode(String code) {
         this.code = code;
     }
-
-//    public Address getAddress() {
-//        return address;
-//    }
-//
-//    public void setAddress(Address address) {
-//        this.address = address;
-//    }
-
 
     public Long getAddressId() {
         return addressId;

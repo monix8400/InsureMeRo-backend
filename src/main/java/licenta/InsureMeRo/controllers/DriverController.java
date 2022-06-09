@@ -13,7 +13,6 @@ import java.util.List;
 public class DriverController {
     private final DriverService driverService;
 
-    // standard constructors, dependency injection
     @Autowired
     public DriverController(DriverService driverService) {
         this.driverService = driverService;
@@ -38,7 +37,5 @@ public class DriverController {
     public void deleteDriverById(@PathVariable("id") Long id) {
         driverService.deleteDriver(id);
     }
-
-    //update
 
 }

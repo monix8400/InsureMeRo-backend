@@ -39,10 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception { //order matters!
         // Enable CORS and disable CSRF
         http.cors().and().csrf().disable();
-        // Set session management to stateless
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // Set permissions on endpoints
-        //http.authorizeRequests().anyRequest().permitAll(); //it's like you don't have any security
         http.authorizeRequests().antMatchers("/login", "/user/getRefreshToken",
                 "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/swagger-ui/**", "/user/addUser").permitAll();
         http.authorizeRequests().antMatchers("**").hasAnyAuthority("CLIENT", "ADMIN");

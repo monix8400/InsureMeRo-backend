@@ -13,7 +13,6 @@ import java.util.List;
 public class PersonalInfoController {
     private final PersonalInfoService personalInfoService;
 
-    // standard constructors, dependency injection
     @Autowired
     public PersonalInfoController(PersonalInfoService personalInfoService) {
         this.personalInfoService = personalInfoService;
@@ -38,8 +37,6 @@ public class PersonalInfoController {
     public void deleteUserById(@PathVariable("id") Long id) {
         personalInfoService.deletePersonalInfo(id);
     }
-
-    //update
 
 }
 

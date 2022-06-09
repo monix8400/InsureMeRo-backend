@@ -13,7 +13,6 @@ import java.util.List;
 public class VehicleController {
     private final VehicleService vehicleService;
 
-    // standard constructors, dependency injection
     @Autowired
     public VehicleController(VehicleService vehicleService) {
         this.vehicleService = vehicleService;
@@ -38,8 +37,6 @@ public class VehicleController {
     public void deleteVehicleById(@PathVariable("id") Long id) {
         vehicleService.deleteVehicle(id);
     }
-
-    //update
 
 }
 

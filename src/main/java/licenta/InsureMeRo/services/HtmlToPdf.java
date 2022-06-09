@@ -83,7 +83,7 @@ public class HtmlToPdf {
     public String replaceData(String content, InsuranceDTO insuranceDTO) {
         String issueDate = String.valueOf(insuranceDTO.getInsurance().getIssueDate());
         String policyNr = insuranceDTO.getInsurance().getId() + issueDate.substring(8)
-                + issueDate.substring(5,7)+ issueDate.substring(0,3);
+                + issueDate.substring(5, 7) + issueDate.substring(0, 3);
 
         content = content.replace("{{nr.polita}}", policyNr);
         String from = String.valueOf(insuranceDTO.getInsurance().getValidFrom());
