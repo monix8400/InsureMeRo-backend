@@ -1,10 +1,8 @@
 package licenta.InsureMeRo.controllers;
 
+import licenta.InsureMeRo.dto.*;
 import licenta.InsureMeRo.models.*;
 import licenta.InsureMeRo.services.*;
-import licenta.InsureMeRo.dto.InsuranceDTO;
-import licenta.InsureMeRo.dto.InsuranceInfoDTO;
-import licenta.InsureMeRo.dto.PersonalInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.*;
 
 
@@ -173,6 +173,53 @@ public class InsuranceController {
     @DeleteMapping("/deleteInsuranceById/{id}")
     public void deleteInsuranceById(@PathVariable("id") Long id) {
         insuranceService.deleteInsurance(id);
+    }
+
+    @GetMapping("getInsurancePrices")
+    public ChartData getInsurancePrices() {
+        List<InsuranceDTO> insuranceDTOList = getInsurances();
+
+        ChartData chartData = new ChartData();
+        ChartValues chartValues0 = new ChartValues(averagePricesProMonth(insuranceDTOList, PersonType.INDIVIDUAL), "Individual");
+        chartData.chartValuesList.add(chartValues0);
+        ChartValues chartValues1 = new ChartValues(averagePricesProMonth(insuranceDTOList, PersonType.LEGAL_PERSON), "Legal Person");
+        chartData.chartValuesList.add(chartValues1);
+
+        chartData.labels = getLastMonths(12).stream().map(localDate -> localDate.getMonth().getDisplayName(TextStyle.FULL,Locale.ENGLISH)).toList();
+        return chartData;
+    }
+
+    private List<Double> averagePricesProMonth(List<InsuranceDTO> insuranceDTOList, PersonType personType) {
+        List<InsuranceDTO> filteredInsuranceList = insuranceDTOList.stream()
+                .filter(insurance -> insurance.getPersonalInfo().getPersonType() == personType)
+                .toList();
+
+        List<Double> average = new ArrayList<>();
+
+        List<LocalDate> last12Months = getLastMonths(12);
+        for (var month : last12Months) {
+
+            List<Float> pricesPerMonth = filteredInsuranceList.stream()
+                    .filter(insurance -> insurance.getInsurance().getValidFrom().toLocalDate().getMonth() == month.getMonth()
+                            && insurance.getInsurance().getValidFrom().toLocalDate().getYear() == month.getYear())
+                    .map(insurance -> insurance.getInsurance().getPrice())
+                    .toList();
+
+            var avg = pricesPerMonth.stream().mapToDouble(price -> (double) price).average().orElse(0.0);
+
+            avg = Double.parseDouble(new DecimalFormat("0.00").format(avg));
+            average.add(avg);
+        }
+
+        return average;
+    }
+
+    private List<LocalDate> getLastMonths(int noMonths) {
+        List<LocalDate> lastMonths = new ArrayList<>();
+        for (int i = noMonths-1; i >= 0; i--) {
+            lastMonths.add(LocalDate.now().minusMonths(i));
+        }
+        return lastMonths;
     }
 
     private InsuranceDTO insuranceToInsuranceDTO(Insurance insurance) {
