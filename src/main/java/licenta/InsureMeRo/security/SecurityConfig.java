@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // Set permissions on endpoints
         http.authorizeRequests().antMatchers("/login", "/user/getRefreshToken",
-                "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/swagger-ui/**", "/user/addUser").permitAll();
+                "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/swagger-ui/**", "/user/addUser", "/").permitAll();
         http.authorizeRequests().antMatchers("**").hasAnyAuthority("CLIENT", "ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         // Add authentication and authorization filter
@@ -63,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        config.setAllowedOrigins(List.of("http://localhost:4200","http://insuremero.s3-website.eu-central-1.amazonaws.com"));
         config.setAllowCredentials(true);
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
