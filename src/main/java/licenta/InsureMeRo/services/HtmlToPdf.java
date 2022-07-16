@@ -15,9 +15,9 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 @Slf4j
 public class HtmlToPdf {
-    private static final String HTML_INPUT_TEMPLATE = "src/main/resources/templates/insuranceTemplate.html";
-    private static final String HTML_NEW_INPUT = "src/main/resources/insurance.html";
-    private static final String PDF_OUTPUT = "src/main/resources/insurance.pdf";
+    private static final String HTML_INPUT_TEMPLATE = "./insuranceTemplate.html";
+    private static final String HTML_NEW_INPUT = "./insurance.html";
+    private static final String PDF_OUTPUT = "./insurance.pdf";
 
     public byte[] generateHtmlToPdf(InsuranceDTO insuranceDTO) throws IOException {
         String htmlContent = readHtmlFile(HTML_INPUT_TEMPLATE);
